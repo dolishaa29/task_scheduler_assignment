@@ -4,10 +4,10 @@ let usermodel=mongo.Schema({
     email:{type:String},
     contact:{type:String},
     password:{type:String},
-    address:{type:String, default:null},
-    gender:{type:String, default:null},
-    dob:{type:String,default:null},
-    bio:{type:String, default:null}
+    address:{type:String},
+    gender:{type:String},
+    dob:{type:String},
+    bio:{type:String}
 
 })
 module.exports=mongo.model('user','usermodel');
