@@ -201,6 +201,7 @@ exports.updatestatus = async (req, res) => {
 exports.guestlogin=async(req,res)=>
 {
     try{
+        console.log("hi")
     let email="guest@gmail.com";
     let password="guest123";
     let data=await rec.findOne({email:email});

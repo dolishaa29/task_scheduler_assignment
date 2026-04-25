@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [role] = useState('user');
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -41,6 +41,29 @@ const Login = () => {
     }
   };
 
+  const handleGuestLogin = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/guestlogin",
+        { isGuest: true },
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status === 200 && response.data.token) {
+        Cookies.set("token", response.data.token, { expires: 1 });
+        navigate("/Userdashboard");
+      } else {
+        setMessage("Guest Login Failed");
+      }
+    } catch (err) {
+      setMessage("Guest Login Failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-rose-100 to-pink-200 px-4">
 
@@ -58,7 +81,9 @@ const Login = () => {
         <form onSubmit={handleLogin} className="space-y-5">
 
           <div>
-            <label className="text-xs font-semibold text-pink-400 uppercase">Email</label>
+            <label className="text-xs font-semibold text-pink-400 uppercase">
+              Email
+            </label>
             <input
               type="email"
               className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
@@ -68,7 +93,9 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-pink-400 uppercase">Password</label>
+            <label className="text-xs font-semibold text-pink-400 uppercase">
+              Password
+            </label>
             <input
               type="password"
               className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
@@ -85,15 +112,16 @@ const Login = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          <button
-            type="button"
-            onClick={() => navigate("/Userdashboard")}
-            className="w-full py-3 rounded-xl border border-pink-200 text-pink-500 font-semibold hover:bg-pink-50 transition"
-          >
-            Login as Guest
-          </button>
-
         </form>
+
+        <button
+          type="button"
+          onClick={handleGuestLogin}
+          disabled={loading}
+          className="w-full mt-4 py-3 rounded-xl border border-pink-200 text-pink-500 font-semibold hover:bg-pink-50 transition"
+        >
+          Login as Guest
+        </button>
 
         {message && (
           <p className="text-center mt-4 text-sm text-pink-500 font-medium">
