@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
-const Changepass= () => {
+const Changepass = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -43,6 +43,7 @@ const Changepass= () => {
         setCurrentPassword('');
         setNewPassword('');
         setConfirmNewPassword('');
+        setTimeout(() => navigate("/profile"), 2000);
       }
     } catch (err) {
       setError(err.response?.data?.msg || "Update failed");
@@ -51,95 +52,101 @@ const Changepass= () => {
     }
   };
 
+  const inputStyle = "w-full px-4 py-3.5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-pink-100 focus:border-pink-200 outline-none transition-all text-gray-700 font-medium";
+  const labelStyle = "text-[11px] font-bold text-pink-400 uppercase tracking-widest ml-1 mb-1.5 block";
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-pink-100 via-rose-100 to-pink-200">
+    <div className="min-h-screen flex items-center justify-center bg-[#fff5f6] px-4 font-sans">
+      
+      <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(255,182,193,0.2)] border border-pink-50 overflow-hidden">
+        
+        <div className="p-8 md:p-10">
+          
+          <div className="text-center mb-10">
+            <h1 className="text-2xl font-black text-gray-800 tracking-tighter">
+               Update Password
+            </h1>
+            
+          </div>
 
-      <div className="w-full max-w-md bg-white/90 backdrop-blur-xl border border-pink-100 rounded-3xl shadow-xl p-8">
+          <form onSubmit={handleChangePassword} className="space-y-6">
 
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold">
-            Task<span className="text-pink-400">Flow</span>
-          </h1>
-          <p className="text-pink-300 text-xs uppercase tracking-widest mt-1">
-            Security Settings
-          </p>
+            <div>
+              <label className={labelStyle}>Current Password</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className={inputStyle}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <div>
+              <label className={labelStyle}>New Password</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className={inputStyle}
+                placeholder="Minimum 6 characters"
+                required
+              />
+            </div>
+
+            <div>
+              <label className={labelStyle}>Confirm New Password</label>
+              <input
+                type="password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                className={inputStyle}
+                placeholder="Repeat new password"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="p-3 bg-rose-50 text-rose-500 rounded-xl text-xs font-bold text-center border border-rose-100 animate-shake">
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="p-3 bg-green-50 text-green-600 rounded-xl text-xs font-bold text-center border border-green-100">
+                {success}
+              </div>
+            )}
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold text-base shadow-lg hover:bg-pink-600 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  "Update Password"
+                )}
+              </button>
+            </div>
+
+          </form>
+
+          <div className="text-center mt-8">
+            <button
+              onClick={() => navigate(-1)}
+              className="text-gray-400 hover:text-pink-500 text-sm font-bold transition-colors flex items-center justify-center gap-1 mx-auto"
+            >
+              
+              ← Back
+              
+            </button>
+          </div>
+
         </div>
-
-        <form onSubmit={handleChangePassword} className="space-y-5">
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">
-              Current Password
-            </label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">
-              New Password
-            </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              placeholder="Enter new password"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={confirmNewPassword}
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              placeholder="Confirm password"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-300 via-rose-300 to-pink-400 text-white font-semibold shadow-md hover:opacity-90 transition"
-          >
-            {loading ? "Updating..." : "Update Password"}
-          </button>
-
-        </form>
-
-        {error && (
-          <p className="text-center mt-4 text-sm text-red-500 font-medium">
-            {error}
-          </p>
-        )}
-
-        {success && (
-          <p className="text-center mt-4 text-sm text-pink-500 font-medium">
-            {success}
-          </p>
-        )}
-
-        <div className="text-center mt-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-pink-400 hover:underline text-sm font-semibold"
-          >
-            ← Back
-          </button>
-        </div>
-
       </div>
     </div>
   );
