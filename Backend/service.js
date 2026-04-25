@@ -113,3 +113,27 @@ catch(err)
     res.status(500).json({msg:"internal server error"});
 }
 }
+
+exports.taskadd=async(req,res)=>
+{
+  let user=req.user._id;
+  let title=req.body.title;
+  let dueDate=req.body.dueDate;
+  let tags=req.body.tags;
+  let taskType=req.body.taskType;
+  
+
+  let task=new rec2({userId:user,title:title,dueDate:dueDate,tags:tags,taskType:taskType});
+  await task.save();
+  res.status(201).json({success:true , msg:"task added successfully"});
+}
+
+exports.deletetask=async(req,res)=>
+{
+
+}
+
+exports.updatestatus=async(req,res)=>
+{
+    
+}
