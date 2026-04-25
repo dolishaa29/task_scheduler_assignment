@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 let { task } = require("./dbconnection");
+app.use("/",require('./router'));
 const PORT=process.env.PORT;
 app.listen(PORT,()=>
 {

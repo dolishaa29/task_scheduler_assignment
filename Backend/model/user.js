@@ -10,4 +10,4 @@ let usermodel=mongo.Schema({
     bio:{type:String}
 
 })
-module.exports=mongo.model('user','usermodel');
+module.exports=mongo.model('user',usermodel);

@@ -1,5 +1,4 @@
 let express=require("express");
-let auth=require("./middleware/user");
 const { register, login, guestlogin, userprofile, updateuser, changepassword, taskadd, viewtask, updatestatus, deletetask } = require("./service");
 let router=express.Router();
 let auth=require('./middleware/user');

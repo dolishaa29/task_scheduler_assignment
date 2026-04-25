@@ -5,3 +5,4 @@ let taskmodel=mongo.Schema({
     tags:{type:String},
     taskType:{type:String,enum:["completed","upcoming","planned"]},
 })
+module.exports=mongo.model('task',taskmodel);
