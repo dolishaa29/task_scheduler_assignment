@@ -12,31 +12,35 @@ const Dash = () => {
   }, []);
 
   const fetchTasks = async () => {
-    const token = Cookies.get("token"); 
-    console.log(token)
+    const token = Cookies.get("token");
     try {
-      const res = await axios.get("http://localhost:7000/viewtask", { 
-        headers: { Authorization: `Bearer ${token}` }, 
-        withCredentials: true 
+      const res = await axios.get("http://localhost:7000/viewtask", {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       });
       setTasks(res.data.tasks);
-    } catch (err) { 
-      console.error("Error fetching tasks", err); 
+    } catch (err) {
+      console.error("Error fetching tasks", err);
     }
+  };
+
+  const handleSignOut = () => {
+    Cookies.set("token", ""); 
+    window.location.href = "/login";
   };
 
   const addTask = async (e) => {
     e.preventDefault();
-    const token = Cookies.get("token"); 
+    const token = Cookies.get("token");
     try {
-      await axios.post("http://localhost:7000/addtask", formData, { 
-        headers: { Authorization: `Bearer ${token}` }, 
-        withCredentials: true 
+      await axios.post("http://localhost:7000/addtask", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       });
       fetchTasks();
       setFormData({ title: "", taskType: "upcoming", dueDate: "", category: "" });
-    } catch (err) { 
-      alert("Failed to add task"); 
+    } catch (err) {
+      alert("Failed to add task");
     }
   };
 
@@ -44,8 +48,8 @@ const Dash = () => {
     try {
       await axios.put("http://localhost:7000/updatestatus", { id });
       fetchTasks();
-    } catch (err) { 
-      alert("Error updating status"); 
+    } catch (err) {
+      alert("Error updating status");
     }
   };
 
@@ -53,8 +57,8 @@ const Dash = () => {
     try {
       await axios.post("http://localhost:7000/deletetask", { id });
       fetchTasks();
-    } catch (err) { 
-      alert("Error deleting task"); 
+    } catch (err) {
+      alert("Error deleting task");
     }
   };
 
@@ -64,72 +68,182 @@ const Dash = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-800">TaskManager Pro</h1>
-        <div className="flex gap-4">
-          <button className="text-sm bg-red-50 text-red-600 px-4 py-1.5 rounded-md hover:bg-red-100">Sign Out</button>
+    <div className="min-h-screen bg-[#fff5f6] font-sans text-gray-700">
+      <nav className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 px-10 py-4 flex justify-between items-center border-b border-pink-100">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-br from-pink-400 to-rose-400 rounded-xl shadow-lg shadow-pink-200">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-black tracking-tight text-gray-800">Task<span className="text-pink-500">Flow</span></h1>
+        </div>
+        
+        <div className="flex items-center gap-6">
+          <button className="flex items-center gap-2 group transition-all">
+            <div className="w-10 h-10 rounded-full border-2 border-pink-100 p-0.5 group-hover:border-pink-400 transition-all">
+               <div className="w-full h-full bg-pink-50 rounded-full flex items-center justify-center text-pink-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                  </svg>
+               </div>
+            </div>
+            <span className="font-semibold text-sm text-gray-600 hidden md:block">My Profile</span>
+          </button>
+          
+          <button 
+            onClick={handleSignOut}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-rose-600 transition-all shadow-lg shadow-gray-200 hover:shadow-rose-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Sign Out
+          </button>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
-          <h2 className="text-lg font-semibold mb-4">Create New Task</h2>
-          <form onSubmit={addTask} className="space-y-4">
-            <input 
-              required
-              className="w-full p-3 border rounded-lg" 
-              placeholder="Task Title" 
-              value={formData.title}
-              onChange={(e) => setFormData({...formData, title: e.target.value})}
-            />
-            <input 
-              className="w-full p-3 border rounded-lg" 
-              placeholder="Category (e.g. Work)" 
-              value={formData.category}
-              onChange={(e) => setFormData({...formData, category: e.target.value})}
-            />
-            <input 
-              type="date"
-              className="w-full p-3 border rounded-lg" 
-              onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
-            />
-            <select className="w-full p-3 border rounded-lg" onChange={(e) => setFormData({...formData, taskType: e.target.value})}>
-              <option value="upcoming">Upcoming</option>
-              <option value="planned">Planned</option>
-            </select>
-            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">Add Task</button>
-          </form>
+      <div className="max-w-7xl mx-auto p-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <div className="lg:col-span-5 xl:col-span-4">
+          <div className="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(255,182,193,0.2)] border border-pink-50">
+            <div className="mb-8">
+              <h2 className="text-3xl font-extrabold text-gray-800 tracking-tight">Create Task</h2>
+            </div>
+
+            <form onSubmit={addTask} className="space-y-6">
+              <div className="relative">
+                <label className="text-[11px] font-bold text-pink-400 uppercase tracking-[2px] ml-1 mb-2 block">Task Information</label>
+                <input 
+                  required
+                  className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all text-gray-700 placeholder:text-gray-300" 
+                  placeholder="Task Title..." 
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <input 
+                    className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all text-gray-700 placeholder:text-gray-300" 
+                    placeholder="Category (e.g. Work)" 
+                    value={formData.category}
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="date"
+                    className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all text-gray-700" 
+                    onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
+                  />
+                </div>
+                <div className="relative">
+                  <select 
+                    className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-200 focus:bg-white outline-none transition-all text-gray-700 appearance-none cursor-pointer"
+                    onChange={(e) => setFormData({...formData, taskType: e.target.value})}
+                  >
+                    <option value="upcoming">Upcoming</option>
+                    <option value="planned">Planned</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-rose-400 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-pink-100 hover:shadow-pink-200 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 mt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
+                </svg>
+                Add to Schedule
+              </button>
+            </form>
+          </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <div className="flex bg-gray-100 p-1 rounded-lg mb-6">
+        <div className="lg:col-span-7 xl:col-span-8 space-y-8">
+          <div className="bg-white/60 p-2 rounded-3xl flex gap-2 border border-white/50 backdrop-blur-sm">
             {["upcoming", "planned", "completed"].map((tab) => (
               <button 
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2 text-sm font-medium rounded-md capitalize ${activeTab === tab ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
+                className={`flex-1 py-3.5 text-sm font-bold rounded-2xl capitalize transition-all ${
+                  activeTab === tab 
+                  ? "bg-white text-pink-600 shadow-xl shadow-pink-100 scale-100" 
+                  : "text-gray-400 hover:text-gray-600 hover:bg-white/40"
+                }`}
               >
                 {tab}
               </button>
             ))}
           </div>
 
-          <div className="space-y-3">
+          <div className="grid gap-5">
             {filteredTasks.length > 0 ? filteredTasks.map((t) => (
-              <div key={t._id} className="flex justify-between items-center p-4 border rounded-lg hover:border-blue-200 transition">
-                <div>
-                  <p className="font-medium text-gray-800">{t.title}</p>
-                  <p className="text-xs text-gray-400">{t.dueDate ? new Date(t.dueDate).toLocaleDateString() : "No Date"}</p>
+              <div key={t._id} className="group bg-white p-6 rounded-[2rem] flex justify-between items-center border border-transparent hover:border-pink-100 shadow-sm hover:shadow-2xl hover:shadow-pink-100/50 transition-all duration-500">
+                <div className="flex items-center gap-6">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors ${
+                    t.taskType === 'completed' ? 'bg-green-50 text-green-500' : 'bg-pink-50 text-pink-500'
+                  }`}>
+                    {t.taskType === 'completed' ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className={`font-bold text-xl ${t.taskType === 'completed' ? 'text-gray-300 line-through' : 'text-gray-800'}`}>
+                      {t.title}
+                    </h3>
+                    <div className="flex items-center gap-4 mt-1.5">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-pink-400 uppercase tracking-wider">
+                        <span className="w-1.5 h-1.5 rounded-full bg-pink-400"></span>
+                        {t.category || "Task"}
+                      </span>
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {t.dueDate ? new Date(t.dueDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : "Later"}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex gap-2">
+                
+                <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   {t.taskType !== "completed" && (
-                    <button onClick={() => markComplete(t._id)} className="text-green-500 hover:text-green-700">✓</button>
+                    <button 
+                      onClick={() => markComplete(t._id)} 
+                      className="w-11 h-11 rounded-xl bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-600 hover:text-white transition-all transform hover:rotate-12 shadow-sm"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </button>
                   )}
-                  <button onClick={() => deleteTask(t._id)} className="text-red-400 hover:text-red-600">✕</button>
+                  <button 
+                    onClick={() => deleteTask(t._id)} 
+                    className="w-11 h-11 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-600 hover:text-white transition-all transform hover:-rotate-12 shadow-sm"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </div>
               </div>
-            )) : <p className="text-center text-gray-400 py-10">No tasks found</p>}
+            )) : (
+              <div className="text-center py-24 bg-white/40 rounded-[3rem] border-4 border-dashed border-pink-100">
+                <div className="inline-block p-6 bg-white rounded-full shadow-inner mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-pink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
+                <p className="text-pink-300 font-bold text-xl tracking-tight uppercase">Ready for new goals?</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

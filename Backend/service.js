@@ -175,11 +175,12 @@ exports.viewtask = async (req, res) => {
 
 exports.updatestatus = async (req, res) => {
     try {
-        const taskId = req.body.id;
 
+        const taskId = req.body.id;
+        console.log(taskId);
         const updatedTask = await rec2.findByIdAndUpdate(
-            taskId,
-            { status: "completed" },
+            {_id:taskId},
+            { taskType: "completed" },
             { new: true }
         );
 

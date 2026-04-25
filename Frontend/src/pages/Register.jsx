@@ -20,156 +20,110 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
-
     try {
-      const res = await axios.post(
-        import.meta.env.VITE_API_URL + "/register",
-        { email, password, name, contact, address, gender, dob, bio }
-      );
-
+      const res = await axios.post(import.meta.env.VITE_API_URL + "/register", {
+        email, password, name, contact, address, gender, dob, bio
+      });
       if (res.status === 200) {
-        setMessage("Account created successfully");
-      } else {
-        setMessage("Registration failed");
+        setMessage("Account created successfully!");
+        setTimeout(() => navigate("/"), 2000);
       }
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessage("Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-pink-100 via-rose-100 to-pink-200">
-
-      <div className="w-full max-w-4xl bg-white/90 backdrop-blur-xl border border-pink-200 rounded-3xl shadow-2xl p-8">
-
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-slate-800">
-            Task<span className="bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500 bg-clip-text text-transparent">Flow</span>
-          </h1>
-          <p className="text-pink-400 text-xs uppercase tracking-widest mt-1">
-            Create Account
-          </p>
-        </div>
-
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-5"
-        >
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">Full Name</label>
-            <input
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">Email</label>
-            <input
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">Password</label>
-            <input
-              type="password"
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">Contact</label>
-            <div className="mt-1">
-              <PhoneInput
-                value={contact}
-                onChange={setContact}
-                className="w-full px-4 py-3 rounded-xl border border-pink-200 bg-white focus:ring-2 focus:ring-pink-300"
-              />
+    <div className="min-h-screen bg-[#fffafa] flex items-center justify-center p-6 font-sans">
+      
+      <div className="w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl shadow-pink-100 border border-pink-50 overflow-hidden">
+        
+        <div className="p-8 md:p-12">
+          <div className="flex justify-between items-end mb-10 border-b border-gray-50 pb-6">
+            <div>
+              <h1 className="text-3xl font-black text-gray-800 tracking-tighter">
+                Task<span className="text-pink-500">Flow</span>
+              </h1>
+             
             </div>
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">Address</label>
-            <input
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">Gender</label>
-            <select
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option value="">Select</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="text-xs font-semibold text-pink-500 uppercase">DOB</label>
-            <input
-              type="date"
-              className="w-full mt-1 px-4 py-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="text-xs font-semibold text-pink-500 uppercase">Bio</label>
-            <textarea
-              className="w-full mt-1 px-4 py-3 h-24 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-300 via-rose-300 to-pink-400 text-white font-semibold shadow-md hover:opacity-90 transition"
-            >
-              {loading ? "Creating..." : "Register"}
+            <button onClick={() => navigate("/")} className="text-pink-500 font-bold text-sm hover:underline">
+              Already a member?
             </button>
           </div>
 
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Full Name</label>
+                <input required className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-100 transition" 
+                  placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} />
+              </div>
 
-        {message && (
-          <p className="text-center mt-4 text-sm text-pink-500 font-medium">
-            {message}
-          </p>
-        )}
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Email Address</label>
+                <input required type="email" className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-100 transition" 
+                  placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
 
-        <div className="text-center mt-6 text-sm text-slate-600">
-          Already have an account?{" "}
-          <button
-            onClick={() => navigate("/")}
-            className="text-pink-500 font-semibold hover:underline"
-          >
-            Login
-          </button>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Password</label>
+                <input required type="password" className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-100 transition" 
+                  placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
+              </div>
+
+              <div className="space-y-1 custom-phone">
+                <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Phone Number</label>
+                <PhoneInput international defaultCountry="IN" value={contact} onChange={setContact} 
+                  className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus-within:ring-2 focus-within:ring-pink-100 transition" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Gender</label>
+                  <select className="w-full p-4 bg-gray-50 rounded-2xl outline-none appearance-none cursor-pointer" value={gender} onChange={(e) => setGender(e.target.value)}>
+                    <option value="">Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">DOB</label>
+                  <input type="date" className="w-full p-4 bg-gray-50 rounded-2xl outline-none" value={dob} onChange={(e) => setDob(e.target.value)} />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Address</label>
+                <input className="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-100 transition" 
+                  placeholder="City, Country" value={address} onChange={(e) => setAddress(e.target.value)} />
+              </div>
+
+              <div className="md:col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-pink-400 uppercase tracking-widest ml-1">Bio</label>
+                <textarea className="w-full p-4 h-28 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-100 transition resize-none" 
+                  placeholder="Tell us about yourself..." value={bio} onChange={(e) => setBio(e.target.value)} />
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <button disabled={loading} type="submit" className="w-full md:w-64 py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-pink-600 transition-all shadow-lg active:scale-95 disabled:opacity-50">
+                {loading ? "Creating Account..." : "Register Now"}
+              </button>
+            </div>
+          </form>
+
+          {message && (
+            <div className={`mt-6 p-4 rounded-xl text-center text-sm font-bold ${message.includes("success") ? "bg-green-50 text-green-600" : "bg-rose-50 text-rose-500"}`}>
+              {message}
+            </div>
+          )}
         </div>
-
       </div>
+
     </div>
   );
 };
