@@ -30,7 +30,7 @@ const Login = () => {
 
       if (response.status === 200 && response.data.token) {
         Cookies.set("token", response.data.token, { expires: 1 });
-        navigate("/Userdashboard");
+        navigate("/dash");
       } else {
         setMessage("Invalid Credentials");
       }
@@ -53,7 +53,7 @@ const Login = () => {
 
       if (response.status === 200 && response.data.token) {
         Cookies.set("token", response.data.token, { expires: 1 });
-        navigate("/Userdashboard");
+        navigate("/dash");
       } else {
         setMessage("Guest Login Failed");
       }

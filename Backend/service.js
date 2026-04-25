@@ -121,11 +121,12 @@ exports.taskadd=async(req,res)=>
   let user=req.user._id;
   let title=req.body.title;
   let dueDate=req.body.dueDate;
-  let tags=req.body.tags;
+  let category=req.body.category;
   let taskType=req.body.taskType;
+  console.log(user);
   
 
-  let task=new rec2({userId:user,title:title,dueDate:dueDate,tags:tags,taskType:taskType});
+  let task=new rec2({userId:user,title:title,dueDate:dueDate,category:category,taskType:taskType});
   await task.save();
   res.status(201).json({success:true , msg:"task added successfully"});
 }
@@ -133,7 +134,7 @@ exports.taskadd=async(req,res)=>
 exports.deletetask=async(req,res)=>
 {
   try {
-        console.log("hi")
+        //console.log("hi")
         const id = req.body.id;
         console.log(id);
         const user = await rec2.findByIdAndDelete(id);
@@ -155,11 +156,12 @@ exports.deletetask=async(req,res)=>
 }
 
 exports.viewtask = async (req, res) => {
-    try {
+    try { 
+        console.log("hi")
         const userId = req.user._id;
-
-        const tasks = await rec2.find({ userId: userId });
-
+        console.log(userId);
+        const tasks = await rec2.find({userId:userId});
+        console.log(tasks)
         res.status(200).json({
             success: true,
             tasks: tasks

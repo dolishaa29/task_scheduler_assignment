@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import UserProfile from './pages/UserProfile'
 import Changepass from './pages/Changepass'
 import Dash from './pages/Dash'
+import User from './components/User'
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
       <Route path='/register' element={<Register/>}/>
       <Route path='/userprofile' element={<UserProfile/>}/>
       <Route path='/changepassword' element={<Changepass/>}/>
-      <Route path='/dash' element={<Dash/>}/>
+      <Route path='/dash' element={<User><Dash/></User>}/>
     </Routes>
     </BrowserRouter>
    </div>
