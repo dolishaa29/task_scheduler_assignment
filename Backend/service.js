@@ -1,4 +1,5 @@
 let rec=require('./model/user');
+let rec2=require('./model/task');
 let jwt=require('jsonwebtoken');
 let bct=require('bcryptjs');
 
@@ -134,7 +135,7 @@ exports.deletetask=async(req,res)=>
         console.log("hi")
         const id = req.body.id;
         console.log(id);
-        const user = await rec.findByIdAndDelete(id);
+        const user = await rec2.findByIdAndDelete(id);
         console.log(user)
 
         res.status(200).json({
@@ -194,3 +195,41 @@ exports.updatestatus = async (req, res) => {
         res.status(500).json({ msg: "internal server error" });
     }
 };
+
+
+exports.guestlogin=async(req,res)=>
+{
+    try{
+    let email="guest@gmail.com";
+    let password="guest123";
+    let data=await rec.findOne({email:email});
+    if(!data)
+    {
+        res.status(400).json({msg:"user not found"});
+    }
+    lpass=data.password;
+    let pass=await bcrypt.compare(password,lpass);
+    if(pass)
+    {
+    let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{expiresIn:"1h"});
+    
+    res.cookie("token",token ,
+        {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",   
+    });
+    console.log("token:",token);
+    res.status(200).json({msg:"user logged in successfully",token:token});
+    }
+    else{
+        res.status(400).json({msg:"invalid password"});
+    }
+
+}
+catch(err)
+{
+    console.log(err);
+    res.status(500).json({msg:"internal server error"});
+}
+}
