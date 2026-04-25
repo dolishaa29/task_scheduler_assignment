@@ -89,7 +89,6 @@ const UserProfile = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
 
-            {/* BASIC INFO */}
             <div className="grid md:grid-cols-2 gap-4">
 
               <div>

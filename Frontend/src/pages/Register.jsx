@@ -25,13 +25,12 @@ const Register = () => {
 
     try {
       const res = await axios.post(
-        import.meta.env.VITE_API_URL + "/userregister",
+        import.meta.env.VITE_API_URL + "/register",
         { email, password, name, contact, address, gender, dob, bio }
       );
 
       if (res.status === 200) {
         setMessage("Account created successfully");
-        setTimeout(() => navigate("/Userdashboard"), 1200);
       } else {
         setMessage("Registration failed");
       }

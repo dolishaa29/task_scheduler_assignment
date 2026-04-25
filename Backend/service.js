@@ -6,6 +6,7 @@ let bct=require('bcryptjs');
 exports.register=async(req,res)=>
 {
     try{
+        console.log("hi")
     let name=req.body.name;
     let email=req.body.email;
     let contact=req.body.contact;
@@ -19,7 +20,7 @@ exports.register=async(req,res)=>
     {        res.status(400).json({msg:"user already exists"});
     }
     else{
-        let hash=await bcrypt.hash(password,10);
+        let hash=await bct.hash(password,10);
         let newuser=new rec({ email:email,password:hash,name:name,contact:contact,address:address,bio:bio,gender:gender,dob:dob});
         await newuser.save();
         res.status(200).json({msg:"user registered successfully"});
@@ -44,7 +45,7 @@ exports.login=async(req,res)=>
         res.status(400).json({msg:"user not found"});
     }
     lpass=data.password;
-    let pass=await bcrypt.compare(password,lpass);
+    let pass=await bct.compare(password,lpass);
     if(pass)
     {
     let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{expiresIn:"1h"});
@@ -208,7 +209,7 @@ exports.guestlogin=async(req,res)=>
         res.status(400).json({msg:"user not found"});
     }
     lpass=data.password;
-    let pass=await bcrypt.compare(password,lpass);
+    let pass=await bct.compare(password,lpass);
     if(pass)
     {
     let token=jwt.sign({token:data.email},process.env.JWT_SECRET,{expiresIn:"1h"});
