@@ -6,7 +6,7 @@ let cookieParser=require("cookie-parser");
 dotenv.config();
 let app=express();
 app.use(cors({
-  origin: "https://taskflow-eight-theta.vercel.app",
+  origin: "https://tasskfloww.vercel.app",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
